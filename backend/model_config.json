@@ -1,0 +1,15 @@
+{
+  "class_names": [
+    "loop",
+    "whorl",
+    "arch"
+  ],
+  "num_clusters": 3,
+  "img_size": [
+    224,
+    224
+  ],
+  "base_model": "EfficientNetB0",
+  "training_images": 4801,
+  "validation_images": 1199
+}

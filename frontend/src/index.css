@@ -1,0 +1,107 @@
+/* ════════════════════════════════════════════════
+   BloodPrint ID — Unified Design System
+   Font: Syne (display) + Outfit (body) + DM Mono (code)
+════════════════════════════════════════════════ */
+
+/* ── Dark theme (default) */
+:root, [data-theme="dark"] {
+  --bg:       #06060f;
+  --bg2:      #0d0d1e;
+  --bg3:      #13132a;
+  --bg4:      #1a1a36;
+  --bg5:      #222246;
+  --b1:       #2a2a52;
+  --b2:       #383870;
+  --red:      #e63946;
+  --red2:     #ff5561;
+  --red3:     rgba(230,57,70,.13);
+  --cyan:     #4cc9f0;
+  --cyan2:    rgba(76,201,240,.11);
+  --cyan3:    rgba(76,201,240,.05);
+  --gold:     #f4a261;
+  --gold2:    rgba(244,162,97,.13);
+  --green:    #7bed9f;
+  --green2:   rgba(123,237,159,.11);
+  --pink:     #f72585;
+  --purple:   #a78bfa;
+  --text:     #e2e6f8;
+  --text2:    #8892c8;
+  --text3:    #50507a;
+  --white:    #f0f2ff;
+  --loop:     #4cc9f0;
+  --whorl:    #f72585;
+  --arch:     #7bed9f;
+  --nav-bg:   rgba(6,6,15,.9);
+  --card-shadow: 0 4px 24px rgba(0,0,0,.4);
+  --input-bg: #13132a;
+  --input-border: #2a2a52;
+  --input-focus:  #4cc9f0;
+}
+
+/* ── Light theme */
+[data-theme="light"] {
+  --bg:       #f0f2fa;
+  --bg2:      #ffffff;
+  --bg3:      #e8ebf8;
+  --bg4:      #dde1f5;
+  --bg5:      #d0d5ee;
+  --b1:       #c8ceea;
+  --b2:       #b0b8de;
+  --red:      #c8232f;
+  --red2:     #e63946;
+  --red3:     rgba(200,35,47,.1);
+  --cyan:     #006fa8;
+  --cyan2:    rgba(0,111,168,.1);
+  --cyan3:    rgba(0,111,168,.05);
+  --gold:     #b84e0a;
+  --gold2:    rgba(184,78,10,.1);
+  --green:    #157a38;
+  --green2:   rgba(21,122,56,.1);
+  --pink:     #a0006a;
+  --purple:   #5b21b6;
+  --text:     #12122a;
+  --text2:    #3a3a6a;
+  --text3:    #7070a8;
+  --white:    #12122a;
+  --loop:     #006fa8;
+  --whorl:    #a0006a;
+  --arch:     #157a38;
+  --nav-bg:   rgba(240,242,250,.92);
+  --card-shadow: 0 4px 20px rgba(0,0,50,.08);
+  --input-bg: #ffffff;
+  --input-border: #c8ceea;
+  --input-focus:  #006fa8;
+}
+
+/* ── Reset */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+  transition: background .25s, color .25s;
+}
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg2); }
+::-webkit-scrollbar-thumb { background: var(--b1); border-radius: 2px; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; }
+input, textarea, select { font-family: inherit; }
+
+/* ── Shared input style (used globally) */
+.bp-input {
+  width: 100%; padding: 11px 14px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px; color: var(--text);
+  font-size: 14px; outline: none;
+  transition: border-color .2s, box-shadow .2s;
+}
+.bp-input:focus {
+  border-color: var(--input-focus);
+  box-shadow: 0 0 0 3px var(--cyan3);
+}
