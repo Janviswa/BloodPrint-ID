@@ -1,11 +1,9 @@
-# render.yaml — Render Blueprint
-# Backend only — Frontend is hosted on Vercel
-
 services:
   - type: web
     name: bloodprint-backend
     runtime: python
     plan: free
+    rootDir: backend
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn "app:create_app()" --bind 0.0.0.0:$PORT --workers 2 --timeout 120
     envVars:
