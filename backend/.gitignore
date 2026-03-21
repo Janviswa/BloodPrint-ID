@@ -1,10 +1,6 @@
-__pycache__/
-*.pyc
-*.pyo
-instance/
-*.db
-uploads/
-reports/
 .env
+__pycache__
+uploads/
+instance/
 venv/
-.venv/
+reports/

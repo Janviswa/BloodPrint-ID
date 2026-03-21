@@ -11,7 +11,7 @@ history_bp = Blueprint('history', __name__)
 @jwt_required()
 def get_history():
     uid  = int(get_jwt_identity())
-    rows = Prediction.query.filter_by(user_id=uid).order_by(Prediction.id.desc()).all()
+    rows = Prediction.query.filter_by(user_id=uid).order_by(Prediction.created_at.desc()).all()
     return jsonify([r.to_dict() for r in rows]), 200
 
 

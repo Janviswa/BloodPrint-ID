@@ -24,10 +24,9 @@ def predict():
     if f.content_type not in ALLOWED:
         return jsonify(error='File must be an image (JPG, PNG, BMP, TIFF).'), 400
 
-    # Save with unique name to avoid collisions
-    ext       = os.path.splitext(f.filename)[1] or '.jpg'
+    ext = os.path.splitext(f.filename)[1] or '.jpg'
     safe_name = f"{uid}_{uuid.uuid4().hex[:8]}{ext}"
-    path      = os.path.join(UPLOAD_DIR, safe_name)
+    path = os.path.join(UPLOAD_DIR, safe_name)
     f.save(path)
 
     try:
@@ -36,21 +35,21 @@ def predict():
         os.remove(path)
         return jsonify(error=str(e)), 500
 
-    # Persist
     rec = Prediction(
-        user_id      = uid,
-        filename     = f.filename,
-        pattern      = result['pattern'],
-        confidence   = result['confidence'],
-        top_bg       = result['top_blood_group'],
-        image_quality= result['image_quality'],
-        ridge_density= result['ridge_density'],
-        valid_fp     = result['valid_fingerprint'],
-        result_json  = json.dumps(result),
+        user_id=uid,
+        filename=f.filename,
+        pattern=result['pattern'],
+        confidence=result['confidence'],
+        top_bg=result['top_blood_group'],
+        image_quality=result['image_quality'],
+        ridge_density=result['ridge_density'],
+        valid_fp=result['valid_fingerprint'],
+        result_json=json.dumps(result),
     )
     db.session.add(rec)
     db.session.commit()
 
-    result['id']       = rec.id
+    result['id'] = rec.id
     result['filename'] = f.filename
+
     return jsonify(result), 200

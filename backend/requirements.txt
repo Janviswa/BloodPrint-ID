@@ -10,3 +10,4 @@ numpy==1.26.4
 tf_keras
 psycopg2-binary==2.9.9
 gunicorn==22.0.0
+python-dotenv==0.21.0

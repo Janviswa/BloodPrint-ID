@@ -7,12 +7,19 @@ from routes.predict import predict_bp
 from routes.history import history_bp
 from routes.report  import report_bp
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY']              = os.environ.get('SECRET_KEY', 'bloodprint-dev-secret-change-in-prod')
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///bloodprint.db'
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("DATABASE_URL")
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+        "connect_args": {"sslmode": "require"}
+    }
     app.config['JWT_SECRET_KEY']          = os.environ.get('JWT_SECRET', 'bloodprint-jwt-secret-key-32bytes!!')
     app.config['JWT_ACCESS_TOKEN_EXPIRES']= False
     app.config['MAX_CONTENT_LENGTH']      = 16 * 1024 * 1024
