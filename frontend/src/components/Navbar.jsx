@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import logo from '../../logo.png'
 
 const links = [
   { to:'/',         label:'Home'     },
@@ -52,7 +53,7 @@ export default function Navbar() {
       <div onClick={() => nav('/')} style={{
         display:'flex', alignItems:'center', gap:10, cursor:'pointer', marginRight:36, flexShrink:0,
       }}>
-        <img src="/logo.png" alt="logo" style={{ width:30, height:30, objectFit:'contain' }} />
+        <img src={logo} alt="logo" style={{ width:30, height:30 }} />
         <span style={{ fontFamily:'Syne,sans-serif', fontWeight:800, fontSize:16,
           color:'var(--white)', letterSpacing:'-.4px' }}>BloodPrint ID</span>
       </div>

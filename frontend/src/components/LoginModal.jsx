@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
+import logo from '../../logo.png'
 
 const inputStyle = (focus) => ({
   width: '100%', padding: '11px 14px',
@@ -71,7 +72,7 @@ export default function LoginModal() {
 
         {/* Logo + title */}
         <div style={{ display:'flex', alignItems:'center', gap:12, marginBottom:6 }}>
-          <img src="/logo.png" alt="logo" style={{ width:40, height:40, objectFit:'contain' }} />
+          <img src={logo} alt="logo" style={{ width:40, height:40, objectFit:'contain' }} />
           <span style={{ fontFamily:'Syne,sans-serif', fontWeight:800, fontSize:21, color:'var(--white)' }}>
             BloodPrint ID
           </span>
