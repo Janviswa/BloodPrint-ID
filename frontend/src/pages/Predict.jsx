@@ -35,13 +35,17 @@ export default function Predict() {
 
   const analyze = async () => {
     if (!file) return
+
     setLoading(true)
+
     const form = new FormData()
     form.append('file', file)
+
+    console.log("Selected file:", file)
+    console.log("FormData file:", form.get('file'))
+
     try {
-      const { data } = await api.post('/predict', form, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      })
+      const { data } = await api.post('/predict', form)
       setResult(data)
     } catch (e) {
       toast.error(e.response?.data?.error || 'Analysis failed. Check backend.')

@@ -10,7 +10,9 @@ api.interceptors.request.use(cfg => {
   if (tok) {
     cfg.headers.Authorization = `Bearer ${tok}`
   }
-  cfg.headers['Content-Type'] = cfg.headers['Content-Type'] || 'application/json'
+  if (!(cfg.data instanceof FormData)) {
+    cfg.headers['Content-Type'] = 'application/json'
+  }
   return cfg
 })
 
