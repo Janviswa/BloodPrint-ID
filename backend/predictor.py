@@ -5,12 +5,12 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 import cv2
 import numpy as np
-import tensorflow as tf
+from tflite_runtime.interpreter import Interpreter
 
 # ─────────────────────────────────────────────
 # 🔥 LOAD TFLITE MODEL (ONCE)
 # ─────────────────────────────────────────────
-interpreter = tf.lite.Interpreter(model_path="model.tflite")
+interpreter = Interpreter(model_path="model.tflite")
 interpreter.allocate_tensors()
 
 input_details = interpreter.get_input_details()
