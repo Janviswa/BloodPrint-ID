@@ -15,35 +15,37 @@ ALLOWED = {'image/jpeg','image/png','image/bmp','image/tiff','image/webp'}
 @predict_bp.route('/predict', methods=['POST'])
 @jwt_required()
 def predict():
+    print("🔥 PREDICT API CALLED")
+
     uid = int(get_jwt_identity())
+    print("User ID:", uid)
 
     if 'file' not in request.files:
+        print("❌ No file")
         return jsonify(error='No file uploaded.'), 400
 
     f = request.files['file']
+    print("📁 File received:", f.filename, f.content_type)
+
     if f.content_type not in ALLOWED:
-        return jsonify(error='File must be an image (JPG, PNG, BMP, TIFF).'), 400
+        print("❌ Invalid file type")
+        return jsonify(error='Invalid file'), 400
 
     ext = os.path.splitext(f.filename)[1] or '.jpg'
-    safe_name = f"{uid}_{uuid.uuid4().hex[:8]}{ext}"
-    path = os.path.join(UPLOAD_DIR, safe_name)
+    path = os.path.join(UPLOAD_DIR, f"{uuid.uuid4().hex}{ext}")
     f.save(path)
 
+    print("💾 File saved at:", path)
+
     try:
-        print("Running prediction on:", path)
+        print("🚀 Running prediction...")
         result = run_prediction(path)
-        print("RESULT:", result)
+        print("✅ Prediction done:", result)
 
     except Exception as e:
-        import traceback
-        traceback.print_exc()   # 👈 IMPORTANT
-        print("ERROR:", str(e))
-
-        if os.path.exists(path):
-            os.remove(path)
-
+        print("💥 ERROR IN MODEL:", str(e))
         return jsonify(error=str(e)), 500
-    
+        
     rec = Prediction(
         user_id=uid,
         filename=f.filename,
