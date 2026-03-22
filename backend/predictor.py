@@ -12,6 +12,8 @@ output_details = interpreter.get_output_details()
 CLASS_NAMES = ["Loop", "Whorl", "Arch"]
 
 def run_prediction(image_path):
+    print("🔥 REAL MODEL RUNNING")   # ✅ ADD HERE (first line inside function)
+
     # Load image
     img = cv2.imread(image_path)
     img = cv2.resize(img, (224, 224))
@@ -26,6 +28,8 @@ def run_prediction(image_path):
 
     # Get output
     output = interpreter.get_tensor(output_details[0]['index'])[0]
+
+    print("📊 MODEL OUTPUT:", output)   # ✅ ADD HERE (before prediction)
 
     # Prediction
     pred_idx = int(np.argmax(output))
