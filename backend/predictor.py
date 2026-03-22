@@ -38,13 +38,25 @@ def run_prediction(image_path):
     return {
         "pattern": CLASS_NAMES[pred_idx],
         "confidence": confidence,
-        "probabilities": {
-            "Loop": float(output[0]),
-            "Whorl": float(output[1]),
-            "Arch": float(output[2]),
+
+        "pattern_probs": {
+            "loop": float(output[0]),
+            "whorl": float(output[1]),
+            "arch": float(output[2]),
         },
+
+        "blood_group_probs": {
+            "O+": 0.4,
+            "A+": 0.3,
+            "B+": 0.2,
+            "AB+": 0.1
+        },
+
         "top_blood_group": "O+",
         "image_quality": "Good",
         "ridge_density": "Moderate",
+        "clarity_score": 45.2,
+        "density_score": 18.5,
+        "edge_ratio": 0.12,
         "valid_fingerprint": True
     }
