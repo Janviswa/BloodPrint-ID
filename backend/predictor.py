@@ -8,6 +8,13 @@ os.environ['TF_USE_LEGACY_KERAS'] = '1'
 
 import cv2, json
 import numpy as np
+import tensorflow as tf
+
+gpus = tf.config.experimental.list_physical_devices('GPU')
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu, True)
+
+tf.config.set_visible_devices([], 'GPU')  # disable GPU
 
 MODEL_PATH  = os.environ.get('MODEL_PATH',  'bloodprint_efficientnet.h5')
 CONFIG_PATH = os.environ.get('CONFIG_PATH', 'model_config.json')
