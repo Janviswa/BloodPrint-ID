@@ -4,10 +4,9 @@ flask-sqlalchemy==3.1.1
 flask-jwt-extended==4.6.0
 werkzeug==3.0.3
 reportlab==4.1.0
-tensorflow-cpu==2.16.1
 opencv-python-headless==4.9.0.80
 numpy==1.26.4
-tf_keras
+tflite-runtime==2.14.0
 psycopg2-binary==2.9.9
 gunicorn==22.0.0
 python-dotenv==0.21.0
