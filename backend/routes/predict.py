@@ -30,11 +30,20 @@ def predict():
     f.save(path)
 
     try:
+        print("Running prediction on:", path)
         result = run_prediction(path)
-    except Exception as e:
-        os.remove(path)
-        return jsonify(error=str(e)), 500
+        print("RESULT:", result)
 
+    except Exception as e:
+        import traceback
+        traceback.print_exc()   # 👈 IMPORTANT
+        print("ERROR:", str(e))
+
+        if os.path.exists(path):
+            os.remove(path)
+
+        return jsonify(error=str(e)), 500
+    
     rec = Prediction(
         user_id=uid,
         filename=f.filename,
