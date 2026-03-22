@@ -13,7 +13,7 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 ALLOWED = {'image/jpeg','image/png','image/bmp','image/tiff','image/webp'}
 
 @predict_bp.route('/predict', methods=['POST'])
-# @jwt_required()
+@jwt_required()
 def predict():
     uid = int(get_jwt_identity())
 

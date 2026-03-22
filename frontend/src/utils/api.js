@@ -7,12 +7,17 @@ const api = axios.create({
 
 api.interceptors.request.use(cfg => {
   const tok = localStorage.getItem('bp_tok')
+
+  cfg.headers = cfg.headers || {}
+
   if (tok) {
     cfg.headers.Authorization = `Bearer ${tok}`
   }
+
   if (!(cfg.data instanceof FormData)) {
     cfg.headers['Content-Type'] = 'application/json'
   }
+
   return cfg
 })
 
