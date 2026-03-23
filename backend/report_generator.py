@@ -15,7 +15,16 @@ import os
 REPORTS_DIR = 'reports'
 os.makedirs(REPORTS_DIR, exist_ok=True)
 
-LOGO_PATH = os.path.join(os.path.dirname(__file__), 'logo.png')
+# Support both 'Logo.png' (Windows/Git) and 'logo.png' (Linux/Render)
+def _find_logo():
+    base = os.path.dirname(os.path.abspath(__file__))
+    for name in ('Logo.png', 'logo.png', 'LOGO.png'):
+        p = os.path.join(base, name)
+        if os.path.exists(p):
+            return p
+    return os.path.join(base, 'Logo.png')   # fallback (will fail gracefully)
+
+LOGO_PATH = _find_logo()
 
 # ── Light mode palette ────────────────────────────────────────
 C = {
@@ -384,39 +393,21 @@ def generate_pdf(result: dict, rid: int, display_name: str = None) -> str:
     story.append(Spacer(1, 4 * mm))
 
     # ── Title block with logo
-    logo_cell = ''
-    if os.path.exists(LOGO_PATH):
-        from reportlab.platypus import Image as RLImage
-        logo_img = RLImage(LOGO_PATH, width=36, height=36)
-        title_content = [logo_img, _p('<b>BloodPrint ID</b>', fs=22, color=C['dark'])]
-    else:
-        title_content = [_p('<b>BloodPrint ID</b>', fs=22, color=C['dark'])]
+    from reportlab.platypus import Image as RLImage
 
-    title_row = Table([[
-        Table([[
-            _p('<b>BloodPrint ID</b>', fs=22, color=C['dark']),
-        ]], colWidths=[usable * 0.55]),
-        _p(f'Report #{rid}<br/><font size="7" color="#8890b8">{created}</font>',
-           fs=10, color=C['text2'], align=TA_RIGHT),
-    ]], colWidths=[usable * 0.6, usable * 0.4])
-    title_row.setStyle(TableStyle([
-        ('BACKGROUND',    (0,0),(-1,-1), C['bg']),
-        ('TOPPADDING',    (0,0),(-1,-1), 0),
-        ('BOTTOMPADDING', (0,0),(-1,-1), 8),
-        ('LEFTPADDING',   (0,0),(-1,-1), 0),
-        ('VALIGN',        (0,0),(-1,-1), 'MIDDLE'),
-    ]))
+    logo_exists = os.path.exists(LOGO_PATH)
+    if logo_exists:
+        try:
+            logo_img = RLImage(LOGO_PATH, width=40, height=40)
+            hdr_tbl = Table([[
+                logo_img,
+                _p('<b>BloodPrint ID</b>', fs=24, color=C['dark']),
+                _p(f'Report #{rid}', fs=10, color=C['text2'], align=TA_RIGHT),
+            ]], colWidths=[48, usable * 0.5, usable - 48 - usable * 0.5])
+        except Exception:
+            logo_exists = False
 
-    # Build header with logo + title side by side
-    if os.path.exists(LOGO_PATH):
-        from reportlab.platypus import Image as RLImage
-        logo_img = RLImage(LOGO_PATH, width=40, height=40)
-        hdr_tbl = Table([[
-            logo_img,
-            _p('<b>BloodPrint ID</b>', fs=24, color=C['dark']),
-            _p(f'Report #{rid}', fs=10, color=C['text2'], align=TA_RIGHT),
-        ]], colWidths=[48, usable * 0.5, usable - 48 - usable * 0.5])
-    else:
+    if not logo_exists:
         hdr_tbl = Table([[
             _p('<b>BloodPrint ID</b>', fs=24, color=C['dark']),
             _p(f'Report #{rid}', fs=10, color=C['text2'], align=TA_RIGHT),

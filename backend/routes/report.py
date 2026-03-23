@@ -19,12 +19,12 @@ def download_report(rid):
     result['created_at'] = rec.created_at.strftime('%Y-%m-%d %H:%M:%S')
     result['username']   = user.username if user else 'N/A'
 
-    # Extract friendly display name from username/email
-    username = user.username if user else ''
-    if '@' in username:
-        display_name = username.split('@')[0].capitalize()
+    # Use full_name (display name) if set, else fall back to cleaned username
+    if user and user.full_name and user.full_name.strip():
+        display_name = user.full_name.strip()
     else:
-        display_name = username.capitalize()
+        username = user.username if user else ''
+        display_name = username.split('@')[0].capitalize() if '@' in username else username.capitalize()
 
     pdf_path = generate_pdf(result, rid, display_name=display_name)
     return send_file(
