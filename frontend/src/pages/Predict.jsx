@@ -56,12 +56,25 @@ export default function Predict() {
 
   const downloadReport = async () => {
     try {
-      const res = await api.get(`/report/${result.id}`, { responseType: 'blob' })
+      const res = await api.get(`/report/${result.id}`, {
+        responseType: 'blob',
+        timeout: 60000,   // PDF generation can take time on first request
+      })
       const url = URL.createObjectURL(res.data)
       const a   = document.createElement('a')
-      a.href = url; a.download = `BloodPrint_Report_${result.id}.pdf`; a.click()
+      a.href = url
+      a.download = `BloodPrint_Report_${result.id}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
       toast.success('Report downloaded!')
-    } catch { toast.error('Failed to download report.') }
+    } catch (err) {
+      const status = err?.response?.status
+      if (status === 404) toast.error('Report not found.')
+      else if (status === 401) toast.error('Session expired. Please log in again.')
+      else toast.error('Failed to download report. Please try again.')
+    }
   }
 
   return (
