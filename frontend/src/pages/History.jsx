@@ -11,10 +11,11 @@ const BG_COLORS  = {
 }
 
 export default function History() {
-  const [rows,    setRows]    = useState([])
-  const [loading, setLoading] = useState(true)
-  const [detail,  setDetail]  = useState(null)   // full record for side panel
-  const [panelOpen, setPanel] = useState(false)
+  const [rows,      setRows]      = useState([])
+  const [loading,   setLoading]   = useState(true)
+  const [detail,    setDetail]    = useState(null)
+  const [panelOpen, setPanel]     = useState(false)
+  const [pdfLoading, setPdfLoad]  = useState(null)   // id of report being generated
 
   const load = async () => {
     setLoading(true)
@@ -56,13 +57,30 @@ export default function History() {
 
   const downloadReport = async (id, e) => {
     e?.stopPropagation()
+    if (pdfLoading === id) return   // prevent double-click
+    setPdfLoad(id)
+    const toastId = toast.loading('Generating PDF report… this may take up to 30s', { duration: 40000 })
     try {
-      const res = await api.get(`/report/${id}`, { responseType: 'blob' })
+      const res = await api.get(`/report/${id}`, {
+        responseType: 'blob',
+        timeout: 60000,
+      })
       const url = URL.createObjectURL(res.data)
       const a   = document.createElement('a')
-      a.href = url; a.download = `BloodPrint_Report_${id}.pdf`; a.click()
-      toast.success('Report downloaded!')
-    } catch { toast.error('Failed to download.') }
+      a.href = url
+      a.download = `BloodPrint_Report_${id}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      setTimeout(() => URL.revokeObjectURL(url), 1000)
+      toast.success('Report downloaded!', { id: toastId })
+    } catch (err) {
+      const status = err?.response?.status
+      if (status === 404) toast.error('Report not found.', { id: toastId })
+      else toast.error('Failed to generate report. Try again.', { id: toastId })
+    } finally {
+      setPdfLoad(null)
+    }
   }
 
   return (
@@ -145,8 +163,12 @@ export default function History() {
                   </td>
                   <td style={{ padding: '14px 18px' }}>
                     <div style={{ display: 'flex', gap: 6 }}>
-                      <Btn variant="cyan" size="sm" onClick={e => { e.stopPropagation(); downloadReport(r.id, e) }}>
-                        ⬇ PDF
+                      <Btn
+                        variant="cyan" size="sm"
+                        disabled={pdfLoading === r.id}
+                        onClick={e => { e.stopPropagation(); downloadReport(r.id, e) }}
+                      >
+                        {pdfLoading === r.id ? '⏳ Generating…' : '⬇ PDF'}
                       </Btn>
                       <Btn variant="danger" size="sm" onClick={e => deleteOne(r.id, e)}>
                         🗑
@@ -182,13 +204,13 @@ export default function History() {
         transition: 'transform .32s cubic-bezier(.4,0,.2,1)',
         boxShadow: '-24px 0 80px rgba(0,0,0,.6)',
       }}>
-        {detail && <DetailPanel record={detail} onClose={closePanel} onDownload={downloadReport} />}
+        {detail && <DetailPanel record={detail} onClose={closePanel} onDownload={downloadReport} pdfLoading={pdfLoading} />}
       </div>
     </div>
   )
 }
 
-function DetailPanel({ record, onClose, onDownload }) {
+function DetailPanel({ record, onClose, onDownload, pdfLoading }) {
   const r      = record.result || {}
   const info   = r.pattern_info || {}
   const patCol = PAT_COLORS[r.pattern] || 'var(--cyan)'
@@ -259,8 +281,12 @@ function DetailPanel({ record, onClose, onDownload }) {
 
         {/* Actions */}
         <div style={{ display: 'flex', gap: 10, paddingTop: 4 }}>
-          <Btn variant="cyan" onClick={() => onDownload(record.id)}>
-            ⬇ Download PDF
+          <Btn
+            variant="cyan"
+            disabled={pdfLoading === record.id}
+            onClick={() => onDownload(record.id)}
+          >
+            {pdfLoading === record.id ? '⏳ Generating…' : '⬇ Download PDF'}
           </Btn>
           <Btn variant="ghost" onClick={onClose}>Close</Btn>
         </div>

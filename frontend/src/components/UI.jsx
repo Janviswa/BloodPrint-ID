@@ -51,15 +51,24 @@ export function Btn({ variant='primary', size='md', children, style={}, disabled
   const fnt = size==='sm' ? 12.5 : 14
   const rad = size==='sm' ? 8 : 10
   return (
-    <button disabled={disabled} style={{
-      display:'inline-flex', alignItems:'center', justifyContent:'center', gap:7,
-      padding:pad, borderRadius:rad, fontSize:fnt, fontWeight:600,
-      cursor: disabled ? 'not-allowed' : 'pointer',
-      opacity: disabled ? .5 : 1,
-      whiteSpace:'nowrap', transition:'all .18s', fontFamily:'Outfit,sans-serif',
-      letterSpacing:'-.1px',
-      ...BTN[variant], ...style,
-    }} {...props}>{children}</button>
+    <>
+      <button disabled={disabled} className={`bp-btn bp-btn-${variant}`} style={{
+        display:'inline-flex', alignItems:'center', justifyContent:'center', gap:7,
+        padding:pad, borderRadius:rad, fontSize:fnt, fontWeight:600,
+        cursor: disabled ? 'not-allowed' : 'pointer',
+        pointerEvents: disabled ? 'none' : 'auto',
+        opacity: disabled ? .5 : 1,
+        whiteSpace:'nowrap', transition:'all .18s', fontFamily:'Outfit,sans-serif',
+        letterSpacing:'-.1px', userSelect:'none',
+        ...BTN[variant], ...style,
+      }} {...props}>{children}</button>
+      <style>{`
+        .bp-btn { position: relative; }
+        .bp-btn:hover:not(:disabled) { filter: brightness(1.15); transform: translateY(-1px); }
+        .bp-btn:active:not(:disabled) { transform: translateY(0px); filter: brightness(0.95); }
+        .bp-btn * { pointer-events: none; }
+      `}</style>
+    </>
   )
 }
 
