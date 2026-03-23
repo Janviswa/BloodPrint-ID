@@ -5,7 +5,7 @@
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-blood--print--id.vercel.app-blue?style=for-the-badge&logo=vercel)](https://blood-print-id.vercel.app)
 [![Backend](https://img.shields.io/badge/Backend-Render-46E3B7?style=for-the-badge&logo=render)](https://render.com)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
-[![YouTube](https://img.shields.io/badge/Demo%20Video-YouTube-FF0000?style=for-the-badge&logo=youtube)](https://www.youtube.com/@jananiviswa05)
+[![YouTube](https://img.shields.io/badge/Demo%20Video-YouTube-FF0000?style=for-the-badge&logo=youtube)]([https://www.youtube.com/@jananiviswa05](https://youtu.be/vyVpR04w9-U))
 [![Gmail](https://img.shields.io/badge/Contact-jananiviswa05@gmail.com-D14836?style=for-the-badge&logo=gmail)](mailto:jananiviswa05@gmail.com)
 
 ---
@@ -14,7 +14,7 @@
 
 🔗 **Website:** [https://blood-print-id.vercel.app](https://blood-print-id.vercel.app)
 
-🎥 **Demo Video:** [Watch on YouTube](https://www.youtube.com/@jananiviswa05)
+🎥 **Demo Video:** [Watch on YouTube]([https://www.youtube.com/@jananiviswa05](https://youtu.be/vyVpR04w9-U))
 
 ---
 
@@ -171,7 +171,7 @@ If you found this project helpful or interesting, please consider giving it a **
 
 [![GitHub](https://img.shields.io/badge/GitHub-Janiswa-181717?style=flat-square&logo=github)](https://github.com/Janiswa)
 [![Gmail](https://img.shields.io/badge/Gmail-jananiviswa05@gmail.com-D14836?style=flat-square&logo=gmail)](mailto:jananiviswa05@gmail.com)
-[![YouTube](https://img.shields.io/badge/YouTube-Demo-FF0000?style=flat-square&logo=youtube)](https://www.youtube.com/@jananiviswa05)
+[![YouTube](https://img.shields.io/badge/YouTube-Demo-FF0000?style=flat-square&logo=youtube)]([https://www.youtube.com/@jananiviswa0](https://youtu.be/vyVpR04w9-U)5)
 
 ---
 
