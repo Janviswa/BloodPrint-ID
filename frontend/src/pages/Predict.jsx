@@ -15,10 +15,11 @@ const BG_COLORS = {
 const PAT_COLORS = { loop:'var(--loop)', whorl:'var(--whorl)', arch:'var(--arch)' }
 
 export default function Predict() {
-  const [file,    setFile]    = useState(null)
-  const [preview, setPreview] = useState(null)
-  const [loading, setLoading] = useState(false)
-  const [result,  setResult]  = useState(null)
+  const [file,      setFile]    = useState(null)
+  const [preview,   setPreview] = useState(null)
+  const [loading,   setLoading] = useState(false)
+  const [result,    setResult]  = useState(null)
+  const [pdfLoad,   setPdfLoad] = useState(false)
 
   const onDrop = useCallback(accepted => {
     const f = accepted[0]
@@ -55,10 +56,13 @@ export default function Predict() {
   }
 
   const downloadReport = async () => {
+    if (pdfLoad) return
+    setPdfLoad(true)
+    const toastId = toast.loading('Generating PDF report\u2026 please wait up to 30s', { duration: 40000 })
     try {
       const res = await api.get(`/report/${result.id}`, {
         responseType: 'blob',
-        timeout: 60000,   // PDF generation can take time on first request
+        timeout: 60000,
       })
       const url = URL.createObjectURL(res.data)
       const a   = document.createElement('a')
@@ -68,12 +72,13 @@ export default function Predict() {
       a.click()
       document.body.removeChild(a)
       setTimeout(() => URL.revokeObjectURL(url), 1000)
-      toast.success('Report downloaded!')
+      toast.success('Report downloaded!', { id: toastId })
     } catch (err) {
       const status = err?.response?.status
-      if (status === 404) toast.error('Report not found.')
-      else if (status === 401) toast.error('Session expired. Please log in again.')
-      else toast.error('Failed to download report. Please try again.')
+      if (status === 404) toast.error('Report not found.', { id: toastId })
+      else toast.error('Failed to generate report. Please try again.', { id: toastId })
+    } finally {
+      setPdfLoad(false)
     }
   }
 
@@ -176,7 +181,7 @@ export default function Predict() {
             </Card>
           )}
 
-          {result && !loading && <Results result={result} onDownload={downloadReport} />}
+          {result && !loading && <Results result={result} onDownload={downloadReport} pdfLoad={pdfLoad} />}
         </div>
       </div>
     </div>
@@ -184,7 +189,7 @@ export default function Predict() {
 }
 
 /* ── Results sub-component ─────────────────────────────── */
-function Results({ result, onDownload }) {
+function Results({ result, onDownload, pdfLoad }) {
   const info    = result.pattern_info || {}
   const isHi    = !result.low_confidence
   const topBg   = result.top_blood_group
@@ -340,8 +345,13 @@ function Results({ result, onDownload }) {
       {/* ── Report + Disclaimer */}
       <Card>
         <CardTitle>Download Report</CardTitle>
-        <Btn variant="cyan" onClick={onDownload} style={{ marginBottom: 20 }}>
-          ⬇ Download PDF Report
+        <Btn
+          variant="cyan"
+          disabled={pdfLoad}
+          onClick={onDownload}
+          style={{ marginBottom: 20 }}
+        >
+          {pdfLoad ? '⏳ Generating PDF…' : '⬇ Download PDF Report'}
         </Btn>
         <DisclaimerBox />
       </Card>
