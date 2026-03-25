@@ -1,4 +1,4 @@
-<h1 align="center">🩸 BloodPrint ID</h1>
+<h1>🩸 BloodPrint ID</h1>
 
 > Fingerprint pattern classification with statistical blood group correlation — built for educational and research purposes.
 
