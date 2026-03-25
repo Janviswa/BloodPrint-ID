@@ -1,4 +1,4 @@
-# 🩸 BloodPrint ID
+<img width="1920" height="1140" alt="image" src="https://github.com/user-attachments/assets/af5dbde8-e21d-4472-ac74-72661dad3ce4" /># 🩸 BloodPrint ID
 
 > Fingerprint pattern classification with statistical blood group correlation — built for educational and research purposes.
 
@@ -159,7 +159,7 @@ This project is for **educational and research purposes only**. Blood group pred
 
 If you found this project helpful or interesting, please consider giving it a **star** ⭐ — it helps others discover the project and motivates further development!
 
-[![Star this repo](https://img.shields.io/github/stars/Janiswa/BloodPrint-ID?style=social)](https://github.com/Janviswa/BloodPrint-ID)
+[![Star this repo](https://img.shields.io/github/stars/Janviswa/BloodPrint-ID?style=social)](https://github.com/Janviswa/BloodPrint-ID)
 
 > 💬 Have feedback or questions? Reach out at [jananiviswa05@gmail.com](mailto:jananiviswa05@gmail.com)
 
