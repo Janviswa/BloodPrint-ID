@@ -70,8 +70,7 @@ BG_PROBS = {k: _norm(v) for k, v in _RAW.items()}
 _interpreter  = None
 _input_det    = None
 _output_det   = None
-_class_names  = ['loop', 'whorl', 'arch']
-
+_class_names  = ['arch', 'loop', 'whorl']
 
 def _get_interpreter():
     global _interpreter, _input_det, _output_det, _class_names
