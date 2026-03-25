@@ -1,4 +1,4 @@
-<img width="1920" height="1140" alt="image" src="https://github.com/user-attachments/assets/af5dbde8-e21d-4472-ac74-72661dad3ce4" /># 🩸 BloodPrint ID
+🩸 BloodPrint ID
 
 > Fingerprint pattern classification with statistical blood group correlation — built for educational and research purposes.
 
