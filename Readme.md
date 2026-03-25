@@ -159,7 +159,7 @@ This project is for **educational and research purposes only**. Blood group pred
 
 If you found this project helpful or interesting, please consider giving it a **star** ⭐ — it helps others discover the project and motivates further development!
 
-[![Star this repo](https://img.shields.io/github/stars/Janiswa/BloodPrint-ID?style=social)](https://github.com/Janiswa/BloodPrint-ID)
+[![Star this repo](https://img.shields.io/github/stars/Janiswa/BloodPrint-ID?style=social)](https://github.com/Janviswa/BloodPrint-ID)
 
 > 💬 Have feedback or questions? Reach out at [jananiviswa05@gmail.com](mailto:jananiviswa05@gmail.com)
 
