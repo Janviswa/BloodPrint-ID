@@ -6,11 +6,7 @@ werkzeug==3.0.3
 reportlab==4.1.0
 opencv-python-headless==4.9.0.80
 numpy==1.26.4
-# FIX: tflite-runtime 2.14 has no Python 3.11 wheel on PyPI.
-# Use the official Google wheel that supports Python 3.11 on Linux x86_64.
-# If this fails on your Render instance, fall back to: tensorflow-cpu==2.15.0
-tflite-runtime @ https://github.com/google-coral/pycoral/releases/download/v2.0.0/tflite_runtime-2.14.0-cp311-cp311-linux_x86_64.whl ; python_version == "3.11" and sys_platform == "linux"
-tflite-runtime==2.14.0 ; python_version != "3.11" or sys_platform != "linux"
+tensorflow-cpu==2.15.0
 psycopg2-binary==2.9.9
 gunicorn==22.0.0
 python-dotenv==0.21.0
