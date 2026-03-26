@@ -111,15 +111,7 @@ def _get_interpreter():
     return _interpreter, _input_det, _output_det, _class_names
 
 
-# ── Image helpers ─────────────────────────────────────────────
-def _clahe(gray):
-    return cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8)).apply(gray)
-
-def _enhance(img_rgb):
-    resized  = cv2.resize(img_rgb, IMG_SIZE)
-    enhanced = np.stack([_clahe(resized[:, :, c]) for c in range(3)], axis=-1)
-    return enhanced
-
+# ── Image quality helpers (for display only — never affect model input) ──────
 def _valid_fp(img_rgb):
     gray  = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2GRAY)
     edges = cv2.Canny(gray, 50, 150)
@@ -129,7 +121,9 @@ def _valid_fp(img_rgb):
 def _ridge_analysis(img_rgb):
     gray    = cv2.cvtColor(img_rgb, cv2.COLOR_RGB2GRAY)
     small   = cv2.resize(gray, (128, 128))
-    enh     = _clahe(small)
+    # CLAHE used ONLY for quality metrics — never touches model input
+    clahe   = cv2.createCLAHE(clipLimit=2.0, tileGridSize=(8, 8))
+    enh     = clahe.apply(small)
     sx      = cv2.Sobel(enh, cv2.CV_64F, 1, 0, ksize=3)
     sy      = cv2.Sobel(enh, cv2.CV_64F, 0, 1, ksize=3)
     density = float(np.mean(np.sqrt(sx**2 + sy**2)))
@@ -141,11 +135,12 @@ def _ridge_analysis(img_rgb):
 
 def _efficientnet_preprocess(img_rgb_uint8: np.ndarray) -> np.ndarray:
     """
-    Mirror of tensorflow.keras.applications.efficientnet.preprocess_input.
-    Scales [0, 255] → [-1, 1].
-    Done manually so we avoid importing full TF on the Render instance.
+    Exact match to keras.applications.efficientnet.preprocess_input.
+    Resize to 224x224, then scale [0, 255] → [-1, 1].
+    NO CLAHE. NO extra augmentation. Must match training exactly.
     """
-    img = img_rgb_uint8.astype(np.float32)
+    resized = cv2.resize(img_rgb_uint8, IMG_SIZE)
+    img = resized.astype(np.float32)
     img /= 127.5
     img -= 1.0
     return img
@@ -157,11 +152,15 @@ def run_prediction(img_path: str) -> dict:
     if img_bgr is None:
         raise ValueError('Cannot read image file.')
 
-    img_rgb  = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
-    enhanced = _enhance(img_rgb)                          # CLAHE + resize to 224×224
+    img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
 
-    inp = _efficientnet_preprocess(enhanced)              # [-1, 1] float32
-    inp = np.expand_dims(inp, axis=0)                     # (1, 224, 224, 3)
+    # FIX: Preprocessing must match training exactly — resize + normalize only.
+    # The previous code applied CLAHE to each RGB channel before normalizing.
+    # This corrupted the input distribution vs what the model was trained on,
+    # causing it to always predict the same class. CLAHE is now only used
+    # for quality metrics (below) and never touches the model input.
+    inp = _efficientnet_preprocess(img_rgb)   # (224, 224, 3) float32 in [-1, 1]
+    inp = np.expand_dims(inp, axis=0)          # (1, 224, 224, 3)
 
     interp, inp_det, out_det, class_names = _get_interpreter()
 

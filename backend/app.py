@@ -38,7 +38,27 @@ def create_app(*args, **kwargs):
         _migrate_add_full_name()
         _seed_demo()
 
+    # FIX: Pre-load the TFLite model at startup so the first real request
+    # doesn't time out. Surfaces missing-model errors immediately in logs.
+    _preload_model()
+
+    @app.route('/health')
+    def health():
+        return {'status': 'ok'}, 200
+
     return app
+
+
+def _preload_model():
+    """Warm-up: load the TFLite interpreter at startup."""
+    try:
+        from predictor import _get_interpreter
+        _get_interpreter()
+        print("[app] Model pre-loaded successfully.")
+    except FileNotFoundError as e:
+        print(f"[app] WARNING: Model file missing — {e}")
+    except Exception as e:
+        print(f"[app] WARNING: Model pre-load failed — {e}")
 
 def _migrate_add_full_name():
     """Add full_name column if it doesn't exist (safe migration)."""
