@@ -152,7 +152,7 @@ def smoke_test(tflite_path: str):
     interp.set_tensor(inp_det['index'], dummy)
     interp.invoke()
     out = interp.get_tensor(out_det['index'])[0]
-    classes = ['loop', 'whorl', 'arch']
+    classes = ['arch', 'loop', 'whorl']
     print(f"\n[convert] Smoke-test: {[round(float(x),4) for x in out]}")
     print(f"[convert] Predicted : {classes[int(np.argmax(out))]}  ({max(out)*100:.1f}%)")
     if all(abs(p - out[0]) < 0.01 for p in out):
