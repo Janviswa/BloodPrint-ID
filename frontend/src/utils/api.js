@@ -32,5 +32,10 @@ api.interceptors.response.use(
     return Promise.reject(err)
   }
 )
+// Keep Render free tier alive — ping every 4 minutes
+const BACKEND = import.meta.env.VITE_API_URL
+setInterval(() => {
+  fetch(`${BACKEND}/health`).catch(() => {})
+}, 4 * 60 * 1000)
 
 export default api
